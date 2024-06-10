@@ -44,7 +44,7 @@ def display_color_palette(hex_colors, rgb_colors):
 # Streamlit UI
 st.set_page_config(page_title="Color Picker Generator", page_icon=":art:", layout="wide")
 
-st.title("Color Picker Generator 🎨")
+st.title("🎨 Color Picker Generator 🎨")
 st.markdown("""
     Upload an image and discover the 8 most dominant colors in it as a color palette.
     """)
