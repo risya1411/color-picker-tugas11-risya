@@ -6,27 +6,27 @@ from collections import Counter
 from matplotlib import colors
 
 def get_dominant_colors(image, k=8):
-    # Convert image from BGR to RGB and reshape it
+    # Convert image to RGB from BGR
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = image.reshape((image.shape[0] * image.shape[1], 3))
     
-    # Apply KMeans to find dominant colors
+    # KMeans to find dominant colors
     kmeans = KMeans(n_clusters=k)
     kmeans.fit(image)
     
-    # Count color frequencies and get cluster centers
+    # Count and get the colors
     counts = Counter(kmeans.labels_)
     centers = kmeans.cluster_centers_
     
-    # Order colors by frequency and convert to HEX
+    # Order colors by frequency
     ordered_colors = [centers[i] for i in counts.keys()]
-    hex_colors = [colors.rgb2hex(ordered_colors[i] / 255.0).upper() for i in range(k)]
+    hex_colors = [colors.rgb2hex(ordered_colors[i] / 255.0).upper() for i in range(k)]  # Upper case hex colors
     rgb_colors = [ordered_colors[i] for i in range(k)]
     
     return hex_colors, rgb_colors
 
 def display_color_palette(hex_colors, rgb_colors):
-    # Display the color palette
+    # Function to display the color palette
     st.markdown('<div style="display: flex; flex-wrap: wrap; justify-content: center;">', unsafe_allow_html=True)
     for hex_color, rgb_color in zip(hex_colors, rgb_colors):
         rgb_text = f"RGB({int(rgb_color[0])}, {int(rgb_color[1])}, {int(rgb_color[2])})"
@@ -44,7 +44,7 @@ def display_color_palette(hex_colors, rgb_colors):
 # Streamlit UI
 st.set_page_config(page_title="Color Picker Generator", page_icon=":art:", layout="wide")
 
-st.title("🎨 Color Picker Generator 🎨")
+st.title("Color Picker Generator 🎨")
 st.markdown("""
     Upload an image and discover the 8 most dominant colors in it as a color palette.
     """)
@@ -52,14 +52,14 @@ st.markdown("""
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png", "heic"])
 
 if uploaded_file is not None:
-    # Read and decode the uploaded image
+    # Read the image file
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
     
     # Convert BGR to RGB
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     
-    # Display the uploaded image
+    # Display uploaded image
     st.image(image_rgb, caption='Uploaded Image', use_column_width=True, channels='RGB')
     
     st.write("Generating palette...")
