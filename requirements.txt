@@ -6,3 +6,8 @@ Pillow
 streamlit
 opencv-python
 scikit-learn
+
+streamlit
+opencv-python
+scikit-learn
+matplotlib
